@@ -8,8 +8,4 @@ import java.util.Optional;
 
 public interface ColaboradorRepository extends JpaRepository<Colaborador, Long> {
     boolean existsByCpf(String cpf);
-
-    List<Colaborador> findAllByAtivoTrue();
-
-    Optional<Colaborador> findByIdAndAtivoTrue(Long id);
 }
