@@ -1,0 +1,36 @@
+package com.rafael.itmanager.controller;
+
+import com.rafael.itmanager.dto.EquipamentoRequestDTO;
+import com.rafael.itmanager.dto.EquipamentoResponseDTO;
+import com.rafael.itmanager.service.EquipamentoService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/equipamentos")
+@RequiredArgsConstructor
+public class EquipamentoController {
+
+    private final EquipamentoService service;
+
+    @PostMapping
+    public ResponseEntity<EquipamentoResponseDTO> cadastroEquipamento(@RequestBody @Valid EquipamentoRequestDTO dto) {
+        var equipamento = service.salvarEquipamento(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(equipamento);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<EquipamentoResponseDTO>> listarEquipamentos() {
+        return ResponseEntity.ok(service.listarEquipamentos());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EquipamentoResponseDTO> buscarEquipamentoPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(service.buscarEquipamentoPorId(id));
+    }
+}
