@@ -1,5 +1,5 @@
 # 🖥️ IT-Asset Manager
-![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
+![Status](https://img.shields.io/badge/status-Em%20desenvolvimento-yellow)
 
 > Sistema de Gestão de Ativos e Inventário de TI  
 > Desenvolvido como prática de **Spring Boot**, aplicando boas práticas, regras de negócio reais e arquitetura limpa.
@@ -15,7 +15,6 @@ O **IT-Asset Manager** permite o controle de equipamentos de TI, colaboradores e
 - 🔄 Registro de **empréstimos e devoluções**
 - 🔐 Validações de dados sensíveis (CPF, patrimônio)
 - 🧾 Histórico completo de movimentações
-- ♻️ Soft Delete para preservação de histórico
 
 ---
 
