@@ -1,0 +1,71 @@
+package com.rafael.itmanager.service;
+
+import com.rafael.itmanager.dto.ColaboradorRequestDTO;
+import com.rafael.itmanager.dto.ColaboradorResponseDTO;
+import com.rafael.itmanager.model.Colaborador;
+import com.rafael.itmanager.repository.ColaboradorRepository;
+import com.rafael.itmanager.repository.EmprestimoRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class ColaboradorService {
+
+    private final ColaboradorRepository repository;
+    private final EmprestimoRepository  emprestimoRepository;
+
+    @Transactional
+    public ColaboradorResponseDTO salvarColaborador(ColaboradorRequestDTO dto) {
+        if (dto.cpf() != null && repository.existsByCpf(dto.cpf())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe um colaborador com esse CPF");
+        }
+
+        Colaborador colaborador = new Colaborador();
+        colaborador.setNome(dto.nome());
+        colaborador.setCpf(dto.cpf());
+        colaborador.setSetor(dto.setor());
+
+        Colaborador salvo = repository.save(colaborador);
+
+        return new ColaboradorResponseDTO(colaborador);
+    }
+
+    public List<ColaboradorResponseDTO> listarColaboradores() {
+        List<Colaborador> colaboradores = repository.findAll();
+        List<ColaboradorResponseDTO> lista = colaboradores.stream()
+                .map(colaborador -> new ColaboradorResponseDTO(colaborador))
+                .toList();
+
+        if (colaboradores.isEmpty()) throw new ResponseStatusException(HttpStatus.OK, "Nenhum colaborador encontrado");
+        return lista;
+    }
+
+    public ColaboradorResponseDTO buscarColaboradorPorId(Long id) {
+        var colaborador = repository
+                .findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Colaborador não encontrado"));
+
+        return new ColaboradorResponseDTO(colaborador);
+    }
+
+    @Transactional
+    public void excluirColaborador(Long id) {
+        var colaborador = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Colaborador não encontrado"));
+
+        if (emprestimoRepository.existsByColaboradorId(id)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Não é possível deletar um colaborador que possui empréstimos registrados.");
+        }
+
+        repository.delete(colaborador);
+    }
+}
