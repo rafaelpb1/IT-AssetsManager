@@ -1,74 +1,115 @@
-IT-Asset Manager
-Sistema de gestão de ativos e inventário de TI desenvolvido como parte de uma Masterclass em Spring Boot. O sistema permite o controle de equipamentos, colaboradores e o registro de empréstimos, garantindo a integridade dos dados e regras de negócio corporativas.
+# 🖥️ IT-Asset Manager
+![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
 
-🛠️ Tecnologias Utilizadas
-Java 17+ (com foco em Records e Modern Java)
+> Sistema de Gestão de Ativos e Inventário de TI  
+> Desenvolvido como prática de **Spring Boot**, aplicando boas práticas, regras de negócio reais e arquitetura limpa.
 
-Spring Boot 3.x
+O **IT-Asset Manager** permite o controle de equipamentos de TI, colaboradores e o registro de empréstimos, garantindo **integridade dos dados**, **consistência transacional** e **validações corporativas**.
 
-Spring Data JPA (Persistência)
+---
 
-Spring Validation (Bean Validation)
+## ✨ Funcionalidades
 
-Spring Web (REST API)
+- 📦 Cadastro e gerenciamento de **equipamentos**
+- 👥 Controle de **colaboradores**
+- 🔄 Registro de **empréstimos e devoluções**
+- 🔐 Validações de dados sensíveis (CPF, patrimônio)
+- 🧾 Histórico completo de movimentações
+- ♻️ Soft Delete para preservação de histórico
 
-Banco de Dados: H2 Database (em memória para desenvolvimento)
+---
 
-Lombok: Redução de boilerplate code
+## 🛠️ Tecnologias Utilizadas
 
-Maven: Gerenciamento de dependências
+- **Java 17+** (Records e Modern Java)
+- **Spring Boot 3.x**
+- **Spring Web** (REST API)
+- **Spring Data JPA** (Persistência)
+- **Spring Validation** (Bean Validation)
+- **Hibernate Validator**
+- **H2 Database** (em memória – ambiente de desenvolvimento)
+- **Lombok** (redução de boilerplate)
+- **Maven** (gerenciamento de dependências)
 
-🏛️ Arquitetura do Projeto
-O projeto segue os princípios de Clean Architecture e camadas bem definidas:
+---
 
-Model (Entities): Mapeamento direto com o banco de dados (JPA).
+## 🏛️ Arquitetura do Projeto
 
-Repository: Interface de comunicação com o banco via Spring Data.
+O projeto segue os princípios de **Clean Architecture**, com responsabilidades bem definidas:
 
-DTOs (Records): Camada de transferência de dados para segurança e validação, evitando a exposição das entidades.
 
-Service: O "coração" do sistema, onde residem as regras de negócio e o controle transacional.
+### 📐 Camadas
 
-Controller: Porta de entrada da API, gerenciando os endpoints REST.
+- **Model (Entities)**  
+  Mapeamento direto com o banco de dados via JPA.
 
-📋 Regras de Negócio Implementadas
-Integridade de Dados: CPF de colaboradores e Patrimônio de equipamentos são únicos.
+- **Repository**  
+  Interface de acesso a dados com Spring Data JPA.
 
-Validação de Entrada: Uso de @CPF do Hibernate Validator e @FutureOrPresent para datas de devolução.
+- **DTOs (Records)**  
+  Garantem segurança, validação e evitam a exposição das entidades.
 
-Fluxo de Empréstimo:
+- **Service**  
+  Núcleo do sistema, responsável pelas regras de negócio e controle transacional.
 
-Um equipamento só pode ser emprestado se seu status for DISPONIVEL.
+- **Controller**  
+  Exposição dos endpoints REST da aplicação.
 
-Ao realizar um empréstimo, o status do equipamento muda automaticamente para EMPRESTADO.
+---
 
-Uso de @Transactional para garantir que o empréstimo e a atualização do status ocorram de forma atômica.
+## 📋 Regras de Negócio Implementadas
 
-Soft Delete: Implementação de desativação lógica de colaboradores (coluna ativo), preservando o histórico para auditoria.
+### 🔒 Integridade de Dados
+- CPF de colaboradores é **único**
+- Patrimônio de equipamentos é **único**
 
-🚀 Endpoints Principais
-Colaboradores
-POST /colaboradores: Cadastra um novo colaborador (valida CPF).
+### ✅ Validações
+- `@CPF` para validação de documentos
+- `@FutureOrPresent` para datas de devolução
 
-GET /colaboradores: Lista colaboradores ativos.
+### 🔄 Fluxo de Empréstimo
+- Um equipamento só pode ser emprestado se estiver com status **DISPONIVEL**
+- Ao ser emprestado, o status muda automaticamente para **EMPRESTADO**
+- Uso de `@Transactional` para garantir atomicidade da operação
 
-DELETE /colaboradores/{id}: Desativação lógica do colaborador.
+---
 
-Equipamentos
-POST /equipamentos: Cadastra novo hardware (Notebook, Totem, etc).
+## 🚀 Endpoints Principais
 
-GET /equipamentos: Lista o inventário completo.
+### 👥 Colaboradores
+| Método | Endpoint | Descrição |
+|------|---------|----------|
+| POST | `/colaboradores` | Cadastra novo colaborador |
+| GET  | `/colaboradores` | Lista colaboradores ativos |
+| GET | `/colaboradores/{id}` | Buscar colaborador |
+| DELETE | `/colaboradores/{id}` | Deletar colaborador |
 
-Empréstimos
-POST /emprestimos: Realiza um novo empréstimo (valida disponibilidade e IDs).
+---
 
-GET /emprestimos: Histórico de movimentações.
+### 💻 Equipamentos
+| Método | Endpoint | Descrição |
+|------|---------|----------|
+| POST | `/equipamentos` | Cadastra novo equipamento |
+| GET  | `/equipamentos` | Lista todo o inventário |
+| GET | `/equipamentos/{id}` | Buscar equipamento |
 
-🛡️ Tratamento de Erros
-O projeto conta com um Global Exception Handler (@RestControllerAdvice) que padroniza as respostas de erro da API, tratando:
+---
 
-400 Bad Request: Erros de validação de campos.
+### 🔄 Empréstimos
+| Método | Endpoint | Descrição |
+|------|---------|----------|
+| POST | `/emprestimos` | Realiza um empréstimo |
+| GET  | `/emprestimos` | Histórico de empréstimos |
+| GET | `/emprestimos/{id}` | Buscar empréstimo |
 
-404 Not Found: Recursos não encontrados.
+---
 
-409 Conflict: Violação de unicidade (CPF/Patrimônio).
+## 🛡️ Tratamento de Erros
+
+A aplicação possui um **Global Exception Handler** (`@RestControllerAdvice`) que padroniza as respostas da API:
+
+- **400 Bad Request** → Erros de validação
+- **404 Not Found** → Recurso não encontrado
+- **409 Conflict** → Violação de unicidade (CPF / Patrimônio)
+
+---
