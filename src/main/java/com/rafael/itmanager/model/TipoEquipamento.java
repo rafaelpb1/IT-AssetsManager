@@ -4,5 +4,6 @@ public enum TipoEquipamento {
     NOTEBOOK,
     TOTEM,
     MONITOR,
-    PERIFERICO
+    PERIFERICO,
+    TABLET
 }
