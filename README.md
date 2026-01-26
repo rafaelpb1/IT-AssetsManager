@@ -20,15 +20,15 @@ O **IT-Asset Manager** permite o controle de equipamentos de TI, colaboradores e
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Java 17+** (Records e Modern Java)
+- **Java 17+**
 - **Spring Boot 3.x**
-- **Spring Web** (REST API)
-- **Spring Data JPA** (Persistência)
-- **Spring Validation** (Bean Validation)
+- **Spring Web**
+- **Spring Data JPA**
+- **Spring Validation**
 - **Hibernate Validator**
-- **H2 Database** (em memória – ambiente de desenvolvimento)
-- **Lombok** (redução de boilerplate)
-- **Maven** (gerenciamento de dependências)
+- **H2 Database**
+- **Lombok**
+- **Maven**
 
 ---
 
