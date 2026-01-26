@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +26,8 @@ public class ColaboradorService {
     @Transactional
     public ColaboradorResponseDTO salvarColaborador(ColaboradorRequestDTO dto) {
         if (dto.cpf() != null && repository.existsByCpf(dto.cpf())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe um colaborador com esse CPF");
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT, "Já existe um colaborador com esse CPF");
         }
 
         Colaborador colaborador = new Colaborador();
@@ -33,25 +35,25 @@ public class ColaboradorService {
         colaborador.setCpf(dto.cpf());
         colaborador.setSetor(dto.setor());
 
-        Colaborador salvo = repository.save(colaborador);
-
-        return new ColaboradorResponseDTO(colaborador);
+        return new ColaboradorResponseDTO(repository.save(colaborador));
     }
 
     public List<ColaboradorResponseDTO> listarColaboradores() {
         List<Colaborador> colaboradores = repository.findAll();
         List<ColaboradorResponseDTO> lista = colaboradores.stream()
-                .map(colaborador -> new ColaboradorResponseDTO(colaborador))
+                .map(ColaboradorResponseDTO::new)
                 .toList();
 
-        if (colaboradores.isEmpty()) throw new ResponseStatusException(HttpStatus.OK, "Nenhum colaborador encontrado");
+        if (colaboradores.isEmpty()) throw new ResponseStatusException(
+                HttpStatus.NO_CONTENT, "Nenhum colaborador encontrado");
         return lista;
     }
 
     public ColaboradorResponseDTO buscarColaboradorPorId(Long id) {
         var colaborador = repository
                 .findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Colaborador não encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Colaborador não encontrado"));
 
         return new ColaboradorResponseDTO(colaborador);
     }
@@ -59,7 +61,8 @@ public class ColaboradorService {
     @Transactional
     public void excluirColaborador(Long id) {
         var colaborador = repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Colaborador não encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Colaborador não encontrado"));
 
         if (emprestimoRepository.existsByColaboradorId(id)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
@@ -67,5 +70,17 @@ public class ColaboradorService {
         }
 
         repository.delete(colaborador);
+    }
+
+    @Transactional
+    public ColaboradorResponseDTO atualizarColaborador(Long id, ColaboradorRequestDTO dto) {
+        var colaborador = repository.findById(id)
+                .orElseThrow( () -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Colaborador não encontrado"));
+
+        colaborador.setNome(dto.nome());
+        colaborador.setSetor(dto.setor());
+
+        return new  ColaboradorResponseDTO(colaborador);
     }
 }

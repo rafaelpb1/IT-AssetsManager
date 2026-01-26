@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -30,7 +31,18 @@ public class ColaboradorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ColaboradorResponseDTO> buscarColaboradorPorId(@PathVariable Long id) {
+    public ResponseEntity<ColaboradorResponseDTO> buscarColaboradorPorId(@PathVariable("id") Long id) {
         return ResponseEntity.ok(service.buscarColaboradorPorId(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluirColaborador(@PathVariable("id") Long id) {
+        service.excluirColaborador(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ColaboradorResponseDTO> atualizarColaborador(@PathVariable("id") Long id, @RequestBody @Valid ColaboradorRequestDTO dto) {
+        return ResponseEntity.ok(service.atualizarColaborador(id, dto));
     }
 }
