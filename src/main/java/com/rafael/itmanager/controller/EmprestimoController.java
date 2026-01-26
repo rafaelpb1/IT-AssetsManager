@@ -32,6 +32,17 @@ public class EmprestimoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<EmprestimoResponseDTO>  buscarEmprestimoPorId(@PathVariable Long id){
-        return  ResponseEntity.ok(service.buscarEmprestimoPorId(id));
+        return ResponseEntity.ok(service.buscarEmprestimoPorId(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EmprestimoResponseDTO> atualizarEmprestimo(@PathVariable Long id, @RequestBody @Valid EmprestimoRequestDTO dto){
+        return ResponseEntity.ok(service.atualizarEmprestimo(id,dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluirEmprestimo(@PathVariable Long id){
+        service.excluirEmprestimo(id);
+        return ResponseEntity.noContent().build();
     }
 }

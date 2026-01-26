@@ -64,7 +64,37 @@ public class EmprestimoService {
     }
 
     public EmprestimoResponseDTO buscarEmprestimoPorId(Long id) {
-        var emprestimo = emprestimoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Emprestimo não encontrado"));
+        var emprestimo = emprestimoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Empréstimo não encontrado"));
         return new EmprestimoResponseDTO(emprestimo);
+    }
+
+    @Transactional
+    public EmprestimoResponseDTO atualizarEmprestimo(Long id, EmprestimoRequestDTO dto) {
+        var emprestimo = emprestimoRepository.findById(id)
+                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Empréstimo não encontrado"));
+
+        var equipamento = emprestimo.getEquipamento();
+
+        equipamento.setStatus(StatusEquipamento.DISPONIVEL);
+        equipamentoRepository.save(equipamento);
+
+        emprestimo.setDataDevolucao(LocalDate.now());
+        emprestimo.setObservacao(dto.observacao());
+
+        return new  EmprestimoResponseDTO(emprestimoRepository.save(emprestimo));
+    }
+
+    @Transactional
+    public void excluirEmprestimo(Long id) {
+        var emprestimo = emprestimoRepository.findById(id)
+                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Empréstimo não encontrado"));
+
+        var equipamento = emprestimo.getEquipamento();
+
+        equipamento.setStatus(StatusEquipamento.DISPONIVEL);
+        equipamentoRepository.save(equipamento);
+
+        emprestimoRepository.delete(emprestimo);
     }
 }
