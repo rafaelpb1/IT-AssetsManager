@@ -33,4 +33,15 @@ public class EquipamentoController {
     public ResponseEntity<EquipamentoResponseDTO> buscarEquipamentoPorId(@PathVariable Long id) {
         return ResponseEntity.ok(service.buscarEquipamentoPorId(id));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EquipamentoResponseDTO> atualizarEquipamento(@PathVariable Long id, @RequestBody @Valid EquipamentoRequestDTO dto) {
+        return ResponseEntity.ok(service.atualizarEquipamento(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluirEquipamento(@PathVariable Long id) {
+        service.excluirEquipamento(id);
+        return ResponseEntity.noContent().build();
+    }
 }
