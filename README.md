@@ -30,7 +30,6 @@ O **IT-Asset Manager** permite o controle de equipamentos de TI, colaboradores e
 - **Lombok**
 - **Maven**
 
----
 
 ## 🏛️ Arquitetura do Projeto
 
@@ -58,7 +57,6 @@ O projeto segue os princípios de **Clean Architecture**, com responsabilidades 
 - **Controller**  
   Exposição dos endpoints REST da aplicação.
 
----
 
 ## 📋 Regras de Negócio Implementadas
 
@@ -82,7 +80,6 @@ O projeto segue os princípios de **Clean Architecture**, com responsabilidades 
 
 - Exclusão de equipamentos respeita as regras de integridade do sistema
 
----
 
 ## 🚀 Endpoints Principais
 
@@ -118,7 +115,6 @@ O projeto segue os princípios de **Clean Architecture**, com responsabilidades 
 | PUT    | `/emprestimos/{id}` | Atualizar empréstimo   |
 | DELETE | `/emprestimos/{id}` | Excluir empréstimo     |
 
----
 
 ## 🛡️ Tratamento de Erros
 
