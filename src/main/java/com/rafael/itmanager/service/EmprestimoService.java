@@ -2,6 +2,7 @@ package com.rafael.itmanager.service;
 
 import com.rafael.itmanager.dto.EmprestimoRequestDTO;
 import com.rafael.itmanager.dto.EmprestimoResponseDTO;
+import com.rafael.itmanager.mapper.EmprestimoMapper;
 import com.rafael.itmanager.model.Emprestimo;
 import com.rafael.itmanager.model.StatusEquipamento;
 import com.rafael.itmanager.repository.ColaboradorRepository;
@@ -24,6 +25,7 @@ public class EmprestimoService {
     private final EmprestimoRepository emprestimoRepository;
     private final ColaboradorRepository colaboradorRepository;
     private final EquipamentoRepository equipamentoRepository;
+    private final EmprestimoMapper mapper;
 
     @Transactional
     public EmprestimoResponseDTO realizarEmprestimo(EmprestimoRequestDTO dto) {
@@ -38,7 +40,7 @@ public class EmprestimoService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Este equipamento não está disponível para empréstimo");
         }
 
-        Emprestimo emprestimo = new Emprestimo();
+        Emprestimo emprestimo = mapper.toEntity(dto);
         emprestimo.setColaborador(colaborador);
         emprestimo.setEquipamento(equipamento);
         emprestimo.setDataEmprestimo(LocalDate.now());
@@ -46,19 +48,17 @@ public class EmprestimoService {
         emprestimo.setObservacao(dto.observacao());
 
         equipamento.setStatus(StatusEquipamento.EMPRESTADO);
-        equipamentoRepository.save(equipamento);
-
         Emprestimo salvo = emprestimoRepository.save(emprestimo);
-        return new EmprestimoResponseDTO(salvo);
+        return mapper.toDTO(salvo);
     }
 
     public List<EmprestimoResponseDTO> listarEmprestimos() {
         List<Emprestimo> emprestimos = emprestimoRepository.findAll();
         List<EmprestimoResponseDTO> lista = emprestimos.stream()
-                .map(EmprestimoResponseDTO::new)
+                .map(mapper::toDTO)
                 .toList();
 
-        if(emprestimos.isEmpty()) throw new ResponseStatusException(HttpStatus.OK, "Não há nenhum empréstimo registrado");
+        if(emprestimos.isEmpty()) throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Não há nenhum empréstimo registrado");
 
         return lista;
     }
@@ -74,15 +74,9 @@ public class EmprestimoService {
         var emprestimo = emprestimoRepository.findById(id)
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Empréstimo não encontrado"));
 
-        var equipamento = emprestimo.getEquipamento();
-
-        equipamento.setStatus(StatusEquipamento.DISPONIVEL);
-        equipamentoRepository.save(equipamento);
-
-        emprestimo.setDataDevolucao(LocalDate.now());
-        emprestimo.setObservacao(dto.observacao());
-
-        return new  EmprestimoResponseDTO(emprestimoRepository.save(emprestimo));
+        mapper.updateFromDTO(dto, emprestimo);
+        Emprestimo atualizado = emprestimoRepository.save(emprestimo);
+        return mapper.toDTO(atualizado);
     }
 
     @Transactional
@@ -91,10 +85,9 @@ public class EmprestimoService {
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Empréstimo não encontrado"));
 
         var equipamento = emprestimo.getEquipamento();
-
         equipamento.setStatus(StatusEquipamento.DISPONIVEL);
-        equipamentoRepository.save(equipamento);
 
+        equipamentoRepository.save(equipamento);
         emprestimoRepository.delete(emprestimo);
     }
 }
