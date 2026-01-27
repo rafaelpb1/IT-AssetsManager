@@ -2,6 +2,8 @@ package com.rafael.itmanager.controller;
 
 import com.rafael.itmanager.dto.EquipamentoRequestDTO;
 import com.rafael.itmanager.dto.EquipamentoResponseDTO;
+import com.rafael.itmanager.dto.EquipamentoStatusDTO;
+import com.rafael.itmanager.model.StatusEquipamento;
 import com.rafael.itmanager.service.EquipamentoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +39,12 @@ public class EquipamentoController {
     @PutMapping("/{id}")
     public ResponseEntity<EquipamentoResponseDTO> atualizarEquipamento(@PathVariable Long id, @RequestBody @Valid EquipamentoRequestDTO dto) {
         return ResponseEntity.ok(service.atualizarEquipamento(id, dto));
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<EquipamentoResponseDTO> atualizarStatusEquipamento(@PathVariable Long id,
+                                                                             @RequestBody @Valid EquipamentoStatusDTO novoStatus) {
+        return ResponseEntity.ok(service.atualizarStatus(id, novoStatus));
     }
 
     @DeleteMapping("/{id}")
