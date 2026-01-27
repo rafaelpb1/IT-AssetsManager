@@ -48,6 +48,10 @@ O projeto segue os princípios de **Clean Architecture**, com responsabilidades 
 - **DTOs (Records)**  
   Garantem segurança, validação e evitam a exposição das entidades.
 
+- **Mappers (MapStruct)**
+
+  Conversão entre DTOs e entidades de forma automática e segura.
+
 - **Service**  
   Núcleo do sistema, responsável pelas regras de negócio e controle transacional.
 
@@ -65,41 +69,54 @@ O projeto segue os princípios de **Clean Architecture**, com responsabilidades 
 ### ✅ Validações
 - `@CPF` para validação de documentos
 - `@FutureOrPresent` para datas de devolução
+- Bean Validation em todos os DTOs
 
 ### 🔄 Fluxo de Empréstimo
 - Um equipamento só pode ser emprestado se estiver com status **DISPONIVEL**
 - Ao ser emprestado, o status muda automaticamente para **EMPRESTADO**
 - Uso de `@Transactional` para garantir atomicidade da operação
+  
+🗑️ Exclusões
+
+- Ao excluir um empréstimo, o equipamento associado retorna automaticamente para DISPONIVEL
+
+- Exclusão de equipamentos respeita as regras de integridade do sistema
 
 ---
 
 ## 🚀 Endpoints Principais
 
 ### 👥 Colaboradores
-| Método | Endpoint | Descrição |
-|------|---------|----------|
-| POST | `/colaboradores` | Cadastra novo colaborador |
-| GET  | `/colaboradores` | Lista colaboradores ativos |
-| GET | `/colaboradores/{id}` | Buscar colaborador |
-| DELETE | `/colaboradores/{id}` | Deletar colaborador |
+| Método | Endpoint | Descrição                     |
+|--------|---------|-------------------------------|
+| POST   | `/colaboradores` | Cadastra novo colaborador     |
+| GET    | `/colaboradores` | Lista colaboradores           |
+| GET    | `/colaboradores/{id}` | Buscar colaborador específico |
+| PUT    | `/colaboradores/{id}` | Atualizar colaborador         |
+| DELETE | `/colaboradores/{id}` | Excluir colaborador           |
 
 ---
 
 ### 💻 Equipamentos
-| Método | Endpoint | Descrição |
-|------|---------|----------|
-| POST | `/equipamentos` | Cadastra novo equipamento |
-| GET  | `/equipamentos` | Lista todo o inventário |
-| GET | `/equipamentos/{id}` | Buscar equipamento |
+| Método | Endpoint                    | Descrição                       |
+|--------|-----------------------------|---------------------------------|
+| POST   | `/equipamentos`             | Cadastra novo equipamento       |
+| GET    | `/equipamentos`             | Lista todo o inventário         |
+| GET    | `/equipamentos/{id}`        | Buscar equipamento específico             |
+| PUT    | `/equipamentos/{id}`        | Atualizar equipamento           |
+| PATCH  | `/equipamentos/{id}/status` | Atualizar status do equipamento |
+| DELETE | `/equipamentos/{id}`        | Excluir equipamento             |
 
 ---
 
 ### 🔄 Empréstimos
-| Método | Endpoint | Descrição |
-|------|---------|----------|
-| POST | `/emprestimos` | Realiza um empréstimo |
-| GET  | `/emprestimos` | Histórico de empréstimos |
-| GET | `/emprestimos/{id}` | Buscar empréstimo |
+| Método | Endpoint | Descrição              |
+|--------|---------|------------------------|
+| POST   | `/emprestimos` | Realiza um empréstimo  |
+| GET    | `/emprestimos` | Histórico de empréstimos |
+| GET    | `/emprestimos/{id}` | Buscar empréstimo específico     |
+| PUT    | `/emprestimos/{id}` | Atualizar empréstimo   |
+| DELETE | `/emprestimos/{id}` | Excluir empréstimo     |
 
 ---
 
@@ -112,3 +129,7 @@ A aplicação possui um **Global Exception Handler** (`@RestControllerAdvice`) q
 - **409 Conflict** → Violação de unicidade (CPF / Patrimônio)
 
 ---
+
+👨‍💻 Autor
+
+Rafael Luna de Souza
