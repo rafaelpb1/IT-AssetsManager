@@ -24,6 +24,14 @@ CREATE TABLE EMPRESTIMO(
     FOREIGN KEY (colaborador_id) REFERENCES COLABORADOR(id)
 );
 
+CREATE TABLE USUARIO(
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    login VARCHAR(20) NOT NULL UNIQUE,
+    senha VARCHAR(300) NOT NULL
+);
+
+INSERT INTO USUARIO(login, senha) VALUES ('rafael', 'rafael');
+
 INSERT INTO COLABORADOR (nome, cpf, setor)
 VALUES ('Rafael Luna', '12345678901', 'TI - Suporte'),
        ('Beatriz Souza', '23456789012', 'Atendimento Hospitalar'),
