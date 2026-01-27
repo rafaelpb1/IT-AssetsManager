@@ -21,7 +21,7 @@ O **IT-Asset Manager** permite o controle de equipamentos de TI, colaboradores e
 ## 🛠️ Tecnologias Utilizadas
 
 - **Java 17+**
-- **Spring Boot 3.x**
+- **Spring Boot 4.0**
 - **Spring Web**
 - **Spring Data JPA**
 - **Spring Validation**
