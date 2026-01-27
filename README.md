@@ -16,7 +16,6 @@ O **IT-Asset Manager** permite o controle de equipamentos de TI, colaboradores e
 - 🔐 Validações de dados sensíveis (CPF, patrimônio)
 - 🧾 Histórico completo de movimentações
 
----
 
 ## 🛠️ Tecnologias Utilizadas
 
