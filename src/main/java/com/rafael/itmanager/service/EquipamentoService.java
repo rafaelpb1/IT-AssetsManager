@@ -2,13 +2,15 @@ package com.rafael.itmanager.service;
 
 import com.rafael.itmanager.dto.EquipamentoRequestDTO;
 import com.rafael.itmanager.dto.EquipamentoResponseDTO;
+import com.rafael.itmanager.dto.EquipamentoStatusDTO;
+import com.rafael.itmanager.mapper.EquipamentoMapper;
 import com.rafael.itmanager.model.Equipamento;
+import com.rafael.itmanager.model.StatusEquipamento;
 import com.rafael.itmanager.repository.EquipamentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.List;
 public class EquipamentoService {
 
     private final EquipamentoRepository repository;
+    private final EquipamentoMapper mapper;
 
     @Transactional
     public EquipamentoResponseDTO salvarEquipamento(EquipamentoRequestDTO dto) {
@@ -26,21 +29,15 @@ public class EquipamentoService {
                     HttpStatus.CONFLICT, "Equipamento com patrimonio já registrado");
         }
 
-        Equipamento equipamento = new Equipamento();
-        equipamento.setNome(dto.nome());
-        equipamento.setPatrimonio(dto.patrimonio());
-        equipamento.setTipo(dto.tipo());
-        equipamento.setStatus(dto.status());
-
+        var equipamento = mapper.toEntity(dto);
         Equipamento salvo = repository.save(equipamento);
-
-        return new EquipamentoResponseDTO(salvo);
+        return mapper.toDTO(salvo);
     }
 
     public List<EquipamentoResponseDTO> listarEquipamentos() {
         List<Equipamento> equipamentos = repository.findAll();
         return equipamentos.stream()
-                .map(EquipamentoResponseDTO::new)
+                .map(mapper::toDTO)
                 .toList();
     }
 
@@ -50,7 +47,7 @@ public class EquipamentoService {
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Equipamento não encontrado"));
 
-        return new EquipamentoResponseDTO(equipamento);
+        return mapper.toDTO(equipamento);
     }
 
     @Transactional
@@ -60,19 +57,31 @@ public class EquipamentoService {
                 .orElseThrow( () -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Equipamento não encontrado"));
 
-        if (!equipamento.getPatrimonio().equals(dto.patrimonio()) &&
+        if (dto.patrimonio() != null &&
+                !dto.patrimonio().equals(equipamento.getPatrimonio()) &&
                 repository.existsByPatrimonio(dto.patrimonio())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
                     "Patrimônio já em uso por outro equipamento");
         }
 
-        equipamento.setNome(dto.nome());
-        equipamento.setPatrimonio(dto.patrimonio());
-        equipamento.setTipo(dto.tipo());
-        equipamento.setStatus(dto.status());
+        mapper.updateFromDTO(dto, equipamento);
+        Equipamento atualizado = repository.save(equipamento);
+        return mapper.toDTO(atualizado);
+    }
 
-        return new  EquipamentoResponseDTO(equipamento);
+    @Transactional
+    public EquipamentoResponseDTO atualizarStatus(Long id, EquipamentoStatusDTO dto) {
+        var equipamento  = repository.
+                findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipamento não encontrado"));
+
+        if (equipamento.getStatus() == StatusEquipamento.EMPRESTADO && dto.status() == StatusEquipamento.DISPONIVEL) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Para disponibilizar este equipamento, realize o processo de devolução formal.");
+        }
+
+        equipamento.setStatus(dto.status());
+        return mapper.toDTO(equipamento);
     }
 
     @Transactional
