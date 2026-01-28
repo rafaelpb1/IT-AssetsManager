@@ -5,38 +5,35 @@ import com.rafael.itmanager.service.UsuarioService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**", "/usuarios/**"))
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomAuthentication CustomAuthentication, CustomFilter customFilter) throws Exception {
+        return http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> {
-                    authorize.requestMatchers("/h2-console/**").permitAll();
                     authorize.requestMatchers("/usuarios/**").permitAll();
-                    authorize.requestMatchers("/colaboradores/**").authenticated();
-                    authorize.requestMatchers("/equipamentos/**").authenticated();
-                    authorize.requestMatchers("/emprestimos/**").authenticated();
-
-                    authorize.anyRequest().permitAll();
+                    authorize.anyRequest().authenticated();
                 })
                 .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults());
-
-                http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
-                return  http.build();
+                .formLogin(Customizer.withDefaults())
+                .authenticationProvider(CustomAuthentication)
+                .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
 
@@ -48,5 +45,10 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(UsuarioService service) {
         return new CustomUserDetailsService(service);
+    }
+
+    @Bean
+    public GrantedAuthorityDefaults grantedAuthorityDefaults() {
+        return new GrantedAuthorityDefaults("");
     }
 }
