@@ -1,7 +1,7 @@
 package com.rafael.itmanager.service;
 
-import com.rafael.itmanager.dto.EmprestimoRequestDTO;
-import com.rafael.itmanager.dto.EmprestimoResponseDTO;
+import com.rafael.itmanager.dto.EmprestimoDTOs.EmprestimoRequestDTO;
+import com.rafael.itmanager.dto.EmprestimoDTOs.EmprestimoResponseDTO;
 import com.rafael.itmanager.mapper.EmprestimoMapper;
 import com.rafael.itmanager.model.Emprestimo;
 import com.rafael.itmanager.model.StatusEquipamento;
@@ -16,7 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
