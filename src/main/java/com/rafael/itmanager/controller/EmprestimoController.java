@@ -1,8 +1,7 @@
 package com.rafael.itmanager.controller;
 
-import com.rafael.itmanager.dto.EmprestimoRequestDTO;
-import com.rafael.itmanager.dto.EmprestimoResponseDTO;
-import com.rafael.itmanager.model.Emprestimo;
+import com.rafael.itmanager.dto.EmprestimoDTOs.EmprestimoRequestDTO;
+import com.rafael.itmanager.dto.EmprestimoDTOs.EmprestimoResponseDTO;
 import com.rafael.itmanager.service.EmprestimoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
