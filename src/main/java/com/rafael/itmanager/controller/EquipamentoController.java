@@ -1,14 +1,14 @@
 package com.rafael.itmanager.controller;
 
-import com.rafael.itmanager.dto.EquipamentoRequestDTO;
-import com.rafael.itmanager.dto.EquipamentoResponseDTO;
-import com.rafael.itmanager.dto.EquipamentoStatusDTO;
-import com.rafael.itmanager.model.StatusEquipamento;
+import com.rafael.itmanager.dto.EquipamentoDTOs.EquipamentoRequestDTO;
+import com.rafael.itmanager.dto.EquipamentoDTOs.EquipamentoResponseDTO;
+import com.rafael.itmanager.dto.EquipamentoDTOs.EquipamentoStatusDTO;
 import com.rafael.itmanager.service.EquipamentoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,12 +21,14 @@ public class EquipamentoController {
     private final EquipamentoService service;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EquipamentoResponseDTO> cadastroEquipamento(@RequestBody @Valid EquipamentoRequestDTO dto) {
         var equipamento = service.salvarEquipamento(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(equipamento);
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<EquipamentoResponseDTO>> listarEquipamentos() {
         return ResponseEntity.ok(service.listarEquipamentos());
     }
