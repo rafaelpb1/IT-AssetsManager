@@ -1,7 +1,7 @@
 package com.rafael.itmanager.mapper;
 
-import com.rafael.itmanager.dto.EquipamentoRequestDTO;
-import com.rafael.itmanager.dto.EquipamentoResponseDTO;
+import com.rafael.itmanager.dto.EquipamentoDTOs.EquipamentoRequestDTO;
+import com.rafael.itmanager.dto.EquipamentoDTOs.EquipamentoResponseDTO;
 import com.rafael.itmanager.model.Equipamento;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

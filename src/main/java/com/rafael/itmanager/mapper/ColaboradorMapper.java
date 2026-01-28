@@ -1,7 +1,7 @@
 package com.rafael.itmanager.mapper;
 
-import com.rafael.itmanager.dto.ColaboradorRequestDTO;
-import com.rafael.itmanager.dto.ColaboradorResponseDTO;
+import com.rafael.itmanager.dto.ColaboradorDTOs.ColaboradorRequestDTO;
+import com.rafael.itmanager.dto.ColaboradorDTOs.ColaboradorResponseDTO;
 import com.rafael.itmanager.model.Colaborador;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

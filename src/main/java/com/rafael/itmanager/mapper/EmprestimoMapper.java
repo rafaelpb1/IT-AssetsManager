@@ -1,7 +1,7 @@
 package com.rafael.itmanager.mapper;
 
-import com.rafael.itmanager.dto.EmprestimoRequestDTO;
-import com.rafael.itmanager.dto.EmprestimoResponseDTO;
+import com.rafael.itmanager.dto.EmprestimoDTOs.EmprestimoRequestDTO;
+import com.rafael.itmanager.dto.EmprestimoDTOs.EmprestimoResponseDTO;
 import com.rafael.itmanager.model.Emprestimo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

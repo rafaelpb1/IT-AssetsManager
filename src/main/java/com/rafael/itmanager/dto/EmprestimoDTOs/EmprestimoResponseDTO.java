@@ -1,4 +1,4 @@
-package com.rafael.itmanager.dto;
+package com.rafael.itmanager.dto.EmprestimoDTOs;
 
 import com.rafael.itmanager.model.Emprestimo;
 

@@ -1,4 +1,4 @@
-package com.rafael.itmanager.dto;
+package com.rafael.itmanager.dto.EquipamentoDTOs;
 
 import com.rafael.itmanager.model.Equipamento;
 import com.rafael.itmanager.model.StatusEquipamento;

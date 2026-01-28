@@ -1,4 +1,4 @@
-package com.rafael.itmanager.dto;
+package com.rafael.itmanager.dto.ColaboradorDTOs;
 
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.br.CPF;

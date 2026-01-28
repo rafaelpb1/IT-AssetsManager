@@ -1,4 +1,4 @@
-package com.rafael.itmanager.dto;
+package com.rafael.itmanager.dto.ColaboradorDTOs;
 
 import com.rafael.itmanager.model.Colaborador;
 
