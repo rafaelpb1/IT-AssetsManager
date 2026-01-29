@@ -1,49 +1,50 @@
-CREATE TABLE EQUIPAMENTO(
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(50) NOT NULL,
-    patrimonio VARCHAR(50) NOT NULL UNIQUE,
-    tipo VARCHAR(30),
-    status VARCHAR(20)
-);
-
-CREATE TABLE COLABORADOR(
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(150) NOT NULL,
-    cpf VARCHAR(11) UNIQUE,
-    setor VARCHAR(50)
-);
-
-CREATE TABLE EMPRESTIMO(
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    equipamento_id BIGINT,
-    colaborador_id BIGINT,
-    data_emprestimo DATE,
-    data_devolucao DATE,
-    observacao TEXT,
-    FOREIGN KEY (equipamento_id) REFERENCES EQUIPAMENTO(id),
-    FOREIGN KEY (colaborador_id) REFERENCES COLABORADOR(id)
-);
-
-CREATE TABLE USUARIO(
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    login VARCHAR(20) NOT NULL UNIQUE,
-    senha VARCHAR(300) NOT NULL
-);
-
-INSERT INTO USUARIO(login, senha) VALUES ('rafael', 'rafael');
-
-INSERT INTO COLABORADOR (nome, cpf, setor)
-VALUES ('Rafael Luna', '12345678901', 'TI - Suporte'),
-       ('Beatriz Souza', '23456789012', 'Atendimento Hospitalar'),
-       ('Carlos Oliveira', '34567890123', 'Recursos Humanos');
-
-
-INSERT INTO EQUIPAMENTO (nome, patrimonio, tipo, status)
-VALUES ('Notebook Dell Latitude', 'PAT-2024-001', 'NOTEBOOK', 'EMPRESTADO'),
-       ('Monitor LG 24pol', 'PAT-2024-002', 'MONITOR', 'DISPONIVEL'),
-       ('Totem Autoatendimento v1', 'PAT-2024-003', 'TOTEM', 'MANUTENCAO'),
-       ('Teclado Mecânico Logitech', 'PAT-2024-004', 'PERIFERICO', 'DISPONIVEL');
-
-INSERT INTO EMPRESTIMO (equipamento_id, colaborador_id, data_emprestimo, data_devolucao, observacao)
-VALUES (1, 1, '2026-01-10', '2026-02-10', 'Equipamento para trabalho remoto'),
-       (2, 2, '2026-01-15', '2026-01-20', 'Uso temporário na recepção');
+-- CREATE TABLE EQUIPAMENTO(
+--     id BIGINT PRIMARY KEY AUTO_INCREMENT,
+--     nome VARCHAR(50) NOT NULL,
+--     patrimonio VARCHAR(50) NOT NULL UNIQUE,
+--     tipo VARCHAR(30),
+--     status VARCHAR(20)
+-- );
+--
+-- CREATE TABLE COLABORADOR(
+--     id BIGINT PRIMARY KEY AUTO_INCREMENT,
+--     nome VARCHAR(150) NOT NULL,
+--     cpf VARCHAR(11) UNIQUE,
+--     setor VARCHAR(50)
+-- );
+--
+-- CREATE TABLE EMPRESTIMO(
+--     id BIGINT PRIMARY KEY AUTO_INCREMENT,
+--     equipamento_id BIGINT,
+--     colaborador_id BIGINT,
+--     data_emprestimo DATE,
+--     data_devolucao DATE,
+--     observacao TEXT,
+--     FOREIGN KEY (equipamento_id) REFERENCES EQUIPAMENTO(id),
+--     FOREIGN KEY (colaborador_id) REFERENCES COLABORADOR(id)
+-- );
+--
+-- CREATE TABLE USUARIO(
+--     id BIGINT PRIMARY KEY AUTO_INCREMENT,
+--     login VARCHAR(20) NOT NULL UNIQUE,
+--     senha VARCHAR(300) NOT NULL,
+--     is_admin boolean DEFAULT FALSE
+-- );
+--
+-- INSERT INTO USUARIO(login, senha) VALUES ('rafael', 'rafael');
+--
+-- INSERT INTO COLABORADOR (nome, cpf, setor)
+-- VALUES ('Rafael Luna', '12345678901', 'TI - Suporte'),
+--        ('Beatriz Souza', '23456789012', 'Atendimento Hospitalar'),
+--        ('Carlos Oliveira', '34567890123', 'Recursos Humanos');
+--
+--
+-- INSERT INTO EQUIPAMENTO (nome, patrimonio, tipo, status)
+-- VALUES ('Notebook Dell Latitude', 'PAT-2024-001', 'NOTEBOOK', 'EMPRESTADO'),
+--        ('Monitor LG 24pol', 'PAT-2024-002', 'MONITOR', 'DISPONIVEL'),
+--        ('Totem Autoatendimento v1', 'PAT-2024-003', 'TOTEM', 'MANUTENCAO'),
+--        ('Teclado Mecânico Logitech', 'PAT-2024-004', 'PERIFERICO', 'DISPONIVEL');
+--
+-- INSERT INTO EMPRESTIMO (equipamento_id, colaborador_id, data_emprestimo, data_devolucao, observacao)
+-- VALUES (1, 1, '2026-01-10', '2026-02-10', 'Equipamento para trabalho remoto'),
+--        (2, 2, '2026-01-15', '2026-01-20', 'Uso temporário na recepção');
