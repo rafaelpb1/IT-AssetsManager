@@ -17,16 +17,18 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = service.obterEntidadePorLogin(username);
+        Usuario usuario = service.obterPorLogin(username);
 
         if (usuario == null) {
             throw new UsernameNotFoundException("Usuário não encontrado");
         }
 
+        String role = usuario.getAdmin() ? "ADMIN" : "USER";
+
         return User.builder()
                 .username(usuario.getLogin())
                 .password(usuario.getSenha())
-                .roles("USER")
+                .roles(role)
                 .build();
     }
 }
