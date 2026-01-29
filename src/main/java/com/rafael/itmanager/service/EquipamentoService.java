@@ -1,8 +1,8 @@
 package com.rafael.itmanager.service;
 
-import com.rafael.itmanager.dto.EquipamentoRequestDTO;
-import com.rafael.itmanager.dto.EquipamentoResponseDTO;
-import com.rafael.itmanager.dto.EquipamentoStatusDTO;
+import com.rafael.itmanager.dto.EquipamentoDTOs.EquipamentoRequestDTO;
+import com.rafael.itmanager.dto.EquipamentoDTOs.EquipamentoResponseDTO;
+import com.rafael.itmanager.dto.EquipamentoDTOs.EquipamentoStatusDTO;
 import com.rafael.itmanager.mapper.EquipamentoMapper;
 import com.rafael.itmanager.model.Equipamento;
 import com.rafael.itmanager.model.StatusEquipamento;
