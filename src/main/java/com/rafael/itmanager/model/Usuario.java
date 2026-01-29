@@ -2,6 +2,7 @@ package com.rafael.itmanager.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Table(name = "usuario")
@@ -9,8 +10,8 @@ import lombok.Data;
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @Column
     private String login;
@@ -18,4 +19,6 @@ public class Usuario {
     @Column
     private String senha;
 
+    @Column(name = "is_admin", nullable = false)
+    private Boolean admin;
 }
