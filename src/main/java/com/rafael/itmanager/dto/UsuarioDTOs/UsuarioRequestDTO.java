@@ -10,8 +10,6 @@ public record UsuarioRequestDTO(
         String login,
         @NotBlank(message = "Campo obrigatório")
         String senha,
-        @NotNull(message = "Campo obrigatório")
-        Boolean admin,
         @NotBlank(message = "Campo obrigatório")
         List<String> permissoes
 ) {
