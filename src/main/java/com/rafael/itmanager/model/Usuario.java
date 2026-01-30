@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 
+import java.util.List;
+
 @Entity
 @Table(name = "usuario")
 @Data
@@ -19,6 +21,6 @@ public class Usuario {
     @Column
     private String senha;
 
-    @Column(name = "is_admin", nullable = false)
-    private Boolean admin;
+    @Transient
+    private List<String> permissoes;
 }
