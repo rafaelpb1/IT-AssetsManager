@@ -35,24 +35,37 @@ public class UsuarioService {
         usuario.setSenha(encoder.encode(usuario.getSenha()));
         repository.save(usuario);
 
-        List<UsuarioGrupo> listaUsuariosGrupo = grupos.stream()
+        List<UsuarioGrupo> listaUsuarioGrupo = grupos.stream()
                 .map(nomeGrupo -> {
-                    Optional<Grupo> possivelNomeGrupo = grupoRepository.findByNome(nomeGrupo);
-                    if (possivelNomeGrupo.isPresent()) {
-                        Grupo grupo = possivelNomeGrupo.get();
+                    Optional<Grupo> possivelGrupo = grupoRepository.findByNome(nomeGrupo);
+
+                    if (possivelGrupo.isPresent()) {
+                        Grupo grupo = possivelGrupo.get();
                         return new UsuarioGrupo(usuario, grupo);
                     }
+
                     return null;
 
-                }).filter(grupo -> grupo != null).collect(Collectors.toList());
+                })      .filter(grupo -> grupo != null)
+                        .collect(Collectors.toList());
 
-        usuarioGrupoRepository.saveAll(listaUsuariosGrupo);
+        usuarioGrupoRepository.saveAll(listaUsuarioGrupo);
 
         return mapper.toDTO(usuario);
     }
 
     public Usuario obterPorLogin(String login) {
-        return repository.findByLogin(login);
+        Optional<Usuario> usuarioOptional = repository.findByLogin(login);
+
+        if(usuarioOptional.isEmpty()) {
+            return null;
+        }
+
+        Usuario usuario = usuarioOptional.get();
+        List<String> permissoes = usuarioGrupoRepository.findPermissoesByUsuario(usuario);
+        usuario.setPermissoes(permissoes);
+
+        return usuario;
     }
 
     public List<Usuario> listarUsuarios() {

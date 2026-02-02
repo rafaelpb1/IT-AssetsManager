@@ -36,7 +36,5 @@ public class CustomFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(req, res);
-
-
     }
 }

@@ -8,6 +8,7 @@ import com.rafael.itmanager.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ public class UsuarioController {
     private final UsuarioMapper mapper;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UsuarioResponseDTO> salvar(@RequestBody UsuarioRequestDTO dto ) {
         UsuarioResponseDTO salvar = service.salvar(dto, dto.permissoes());
         return ResponseEntity.status(HttpStatus.CREATED).body(salvar);

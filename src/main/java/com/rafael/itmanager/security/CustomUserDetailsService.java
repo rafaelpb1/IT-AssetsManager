@@ -23,12 +23,10 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("Usuário não encontrado");
         }
 
-        String role = usuario.getAdmin() ? "ADMIN" : "USER";
-
         return User.builder()
                 .username(usuario.getLogin())
                 .password(usuario.getSenha())
-                .roles(role)
+                .roles("ADMIN", "USER")
                 .build();
     }
 }

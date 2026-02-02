@@ -11,18 +11,19 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class CustomAuthentication implements AuthenticationProvider {
+public class SenhaCustomAuthenticationProvider implements AuthenticationProvider {
     @Override
     public @Nullable Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
         var login = authentication.getName();
-        var senha = authentication.getCredentials().toString();
+        var senha = (String) authentication.getCredentials();
 
         String loginMain = "master";
         String senhaMain = "master";
 
         if (loginMain.equals(login) && senhaMain.equals(senha)) {
-            return new UsernamePasswordAuthenticationToken("Sou master", null, List.of(new SimpleGrantedAuthority("ADMIN")));
+            return new UsernamePasswordAuthenticationToken
+                    ("Sou master", null, List.of(new SimpleGrantedAuthority("ADMIN")));
         }
 
         return null;
